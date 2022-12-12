@@ -78,7 +78,7 @@ while ATTEMPTS > 0 and COMPLETE == False:
     
 
 IRRELEVANT_LETTERS_LIST = []
-    
+
 
 
 
