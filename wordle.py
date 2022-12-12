@@ -81,9 +81,10 @@ computer_choice = random.choice(five_letter_word_list).upper()
 for x in computer_choice:
     computer_choice_list.append(x)
 
-print(computer_choice)
+# print(computer_choice)
 
 while ATTEMPTS > 0 and COMPLETE == False:
+    print(f'You have {ATTEMPTS} attempts remaining')
     player_choice = input('CHOOSE WORD ').upper()
     for y in player_choice:
         player_choice_list.append(y)
@@ -97,7 +98,6 @@ while ATTEMPTS > 0 and COMPLETE == False:
     print(DISPLAY)
     print(GAME_DISPLAY)
     print(f'\nLetters not in word: {IRRELEVANT_LETTERS_LIST}')
-    print(ATTEMPTS)
     
     REF = 0
     player_choice_list = []
@@ -113,10 +113,6 @@ while ATTEMPTS > 0 and COMPLETE == False:
     
 
 IRRELEVANT_LETTERS_LIST = []
-
-# if ATTEMPTS == 0 and DISPLAY != ['🟩', '🟩', '🟩', '🟩', '🟩']:
-#     print('YOU LOSE')
-#     print(f'The word is: {computer_choice}')
     
 
 
