@@ -5,41 +5,6 @@ from operator import itemgetter
 
 import requests
 
-# import pygame
-
-# #----------------------------------------------------------UI DESIGN-----------------------------#
-# pygame.init()
-
-# win = pygame.display.set_mode((500, 500))
-# pygame.display.set_caption("Wordle :)")
-
-# x = 50
-# y = 50
-# width = 40
-# height = 60
-# vel = 5
-
-# run = True
-
-# while run:
-#     pygame.time.delay(100)
-
-#     for event in pygame.event.get():
-#         if event.type == pygame.QUIT:
-#             run = False
-    
-#     pygame.display.update()
-
-# pygame.quit()
-
-
-
-
-
-
-
-
-#----------------------------------------------------------GAME DESIGN---------------------------#
 DISPLAY = []
 GAME_DISPLAY = []
 REF = 0
@@ -76,6 +41,7 @@ pattern = re.compile(r'<span itemprop="name">(\w+)</span>')
 # find all matches
 five_letter_word_list = pattern.findall(meaningpedia_resp.text)
 
+print(five_letter_word_list)
 
 computer_choice = random.choice(five_letter_word_list).upper()
 for x in computer_choice:
@@ -84,10 +50,10 @@ for x in computer_choice:
 # print(computer_choice)
 
 while ATTEMPTS > 0 and COMPLETE == False:
-    print(f'\nYou have {ATTEMPTS} attempts remaining')
+    print(f'You have {ATTEMPTS} attempts remaining')
     player_choice = input('CHOOSE WORD ').upper()
-    if player_choice not in five_letter_word_list:
-        print('Not a valid word! please try again :)')
+    if player_choice.lower() not in five_letter_word_list:
+        print('\n Not a valid word! Try again')
     else:
         for y in player_choice:
             player_choice_list.append(y)
