@@ -1,30 +1,36 @@
-import random 
-import pygame
+import random
+import re
+from collections import Counter
+from operator import itemgetter
 
-#----------------------------------------------------------UI DESIGN-----------------------------#
-pygame.init()
+import requests
 
-win = pygame.display.set_mode((500, 500))
-pygame.display.set_caption("Wordle :)")
+# import pygame
 
-x = 50
-y = 50
-width = 40
-height = 60
-vel = 5
+# #----------------------------------------------------------UI DESIGN-----------------------------#
+# pygame.init()
 
-run = True
+# win = pygame.display.set_mode((500, 500))
+# pygame.display.set_caption("Wordle :)")
 
-while run:
-    pygame.time.delay(100)
+# x = 50
+# y = 50
+# width = 40
+# height = 60
+# vel = 5
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
+# run = True
+
+# while run:
+#     pygame.time.delay(100)
+
+#     for event in pygame.event.get():
+#         if event.type == pygame.QUIT:
+#             run = False
     
-    pygame.display.update()
+#     pygame.display.update()
 
-pygame.quit()
+# pygame.quit()
 
 
 
@@ -34,12 +40,12 @@ pygame.quit()
 
 
 #----------------------------------------------------------GAME DESIGN---------------------------#
-WORD_LIST = ['hello', 'merry']
 DISPLAY = []
 GAME_DISPLAY = []
 REF = 0
 ATTEMPTS = 6
 COMPLETE = False
+IRRELEVANT_LETTERS_LIST = []
 
 def box_check(letter):
     if letter == computer_choice_list[REF]:
@@ -51,13 +57,27 @@ def box_check(letter):
     elif letter not in computer_choice_list:
         DISPLAY.append('_')
         GAME_DISPLAY.append('⬛')
+        if letter not in IRRELEVANT_LETTERS_LIST:
+            IRRELEVANT_LETTERS_LIST.append(letter)
    
 
 computer_choice_list =[]
 player_choice_list = []
 
+meaningpedia_resp = requests.get(
+    "https://meaningpedia.com/5-letter-words?show=all")
 
-computer_choice = random.choice(WORD_LIST).upper()
+# get list of words by grabbing regex captures of response
+# there's probably a far better way to do this by actually parsing the HTML
+# response, but I don't know how to do that, and this gets the job done
+
+# compile regex
+pattern = re.compile(r'<span itemprop="name">(\w+)</span>')
+# find all matches
+five_letter_word_list = pattern.findall(meaningpedia_resp.text)
+
+
+computer_choice = random.choice(five_letter_word_list).upper()
 for x in computer_choice:
     computer_choice_list.append(x)
 
@@ -76,15 +96,27 @@ while ATTEMPTS > 0 and COMPLETE == False:
 
     print(DISPLAY)
     print(GAME_DISPLAY)
+    print(f'\nLetters not in word: {IRRELEVANT_LETTERS_LIST}')
+    print(ATTEMPTS)
     
     REF = 0
     player_choice_list = []
     DISPLAY =[]
     if GAME_DISPLAY == ['🟩', '🟩', '🟩', '🟩', '🟩']:
+        print('Congratulations you win!')
         COMPLETE = True
+
+    if ATTEMPTS == 0 and GAME_DISPLAY != ['🟩', '🟩', '🟩', '🟩', '🟩']:
+        print('YOU LOSE')
+        print(f'The word is: {computer_choice}')
     GAME_DISPLAY=[]
     
 
+IRRELEVANT_LETTERS_LIST = []
+
+# if ATTEMPTS == 0 and DISPLAY != ['🟩', '🟩', '🟩', '🟩', '🟩']:
+#     print('YOU LOSE')
+#     print(f'The word is: {computer_choice}')
     
 
 
