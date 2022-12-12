@@ -41,13 +41,9 @@ pattern = re.compile(r'<span itemprop="name">(\w+)</span>')
 # find all matches
 five_letter_word_list = pattern.findall(meaningpedia_resp.text)
 
-print(five_letter_word_list)
-
 computer_choice = random.choice(five_letter_word_list).upper()
 for x in computer_choice:
     computer_choice_list.append(x)
-
-# print(computer_choice)
 
 while ATTEMPTS > 0 and COMPLETE == False:
     print(f'You have {ATTEMPTS} attempts remaining')
