@@ -84,32 +84,35 @@ for x in computer_choice:
 # print(computer_choice)
 
 while ATTEMPTS > 0 and COMPLETE == False:
-    print(f'You have {ATTEMPTS} attempts remaining')
+    print(f'\nYou have {ATTEMPTS} attempts remaining')
     player_choice = input('CHOOSE WORD ').upper()
-    for y in player_choice:
-        player_choice_list.append(y)
-       
-    for x in player_choice_list:
-        box_check(x)
-        REF+=1
-    
-    ATTEMPTS -= 1
+    if player_choice not in five_letter_word_list:
+        print('Not a valid word! please try again :)')
+    else:
+        for y in player_choice:
+            player_choice_list.append(y)
+        
+        for x in player_choice_list:
+            box_check(x)
+            REF+=1
+        
+        ATTEMPTS -= 1
 
-    print(DISPLAY)
-    print(GAME_DISPLAY)
-    print(f'\nLetters not in word: {IRRELEVANT_LETTERS_LIST}')
-    
-    REF = 0
-    player_choice_list = []
-    DISPLAY =[]
-    if GAME_DISPLAY == ['🟩', '🟩', '🟩', '🟩', '🟩']:
-        print('Congratulations you win!')
-        COMPLETE = True
+        print(DISPLAY)
+        print(GAME_DISPLAY)
+        print(f'\nLetters not in word: {IRRELEVANT_LETTERS_LIST}')
+        
+        REF = 0
+        player_choice_list = []
+        DISPLAY =[]
+        if GAME_DISPLAY == ['🟩', '🟩', '🟩', '🟩', '🟩']:
+            print('Congratulations you win!')
+            COMPLETE = True
 
-    if ATTEMPTS == 0 and GAME_DISPLAY != ['🟩', '🟩', '🟩', '🟩', '🟩']:
-        print('YOU LOSE')
-        print(f'The word is: {computer_choice}')
-    GAME_DISPLAY=[]
+        if ATTEMPTS == 0 and GAME_DISPLAY != ['🟩', '🟩', '🟩', '🟩', '🟩']:
+            print('YOU LOSE')
+            print(f'The word is: {computer_choice}')
+        GAME_DISPLAY=[]
     
 
 IRRELEVANT_LETTERS_LIST = []
