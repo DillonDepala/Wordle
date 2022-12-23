@@ -1,0 +1,101 @@
+- Constants in another file so it's easier to change
+
+- Nice scraping, probably better to use beautifulsoup4 and just search for items with 
+  the property (itemprop="name")
+
+- You don't want the booting up of the game to be dependent on a successful webscraper, 
+  imagine if the format of the website changed, then your scraper would break and the game
+  wouldn't start.
+  - I sugggest scraping the data and just storing in a .txt file
+  - Better yet, you can store the words in a database, it would be a good practice of some sql.
+    You could store additional stuff like the length of the words, allowing you to generalise
+    the game to more than 5 letters, also updating/changing the list of words would be more
+    managable than a .txt file
+  - I would put all of this logic in a separate file since this is more back-end logic, the 
+    game interface would be front-end logic
+
+- Although it just gets a random word from the list, you could have a cache that stores the
+  previous 10 words or something, and use this to guarentee the user doesn't get the same word
+  in the next go.
+
+- Would be better to seggregate the code a little more i.e. seperate functions that handle user
+  input for a word, a function for validating the inputted word, a function for updating the UI.
+  This way, if you wanted to add additional stuff to the game, like different modes with different
+  number of letters, maybe a survival mode where you track the score; it will be easier to implement
+
+DISPLAY = []
+GAME_DISPLAY = []
+REF = 0
+ATTEMPTS = 6
+COMPLETE = False
+IRRELEVANT_LETTERS_LIST = []
+
+
+def box_check(letter):
+    if letter == computer_choice_list[REF]:
+        DISPLAY.append(letter)
+        GAME_DISPLAY.append('🟩')
+    elif letter in computer_choice_list:
+        DISPLAY.append(letter)
+        GAME_DISPLAY.append('🟨')
+    elif letter not in computer_choice_list:
+        DISPLAY.append('_')
+        GAME_DISPLAY.append('⬛')
+        if letter not in IRRELEVANT_LETTERS_LIST:
+            IRRELEVANT_LETTERS_LIST.append(letter)
+
+computer_choice_list =[]
+player_choice_list = []
+
+meaningpedia_resp = requests.get(
+    "https://meaningpedia.com/5-letter-words?show=all")
+
+# get list of words by grabbing regex captures of response
+# there's probably a far better way to do this by actually parsing the HTML
+# response, but I don't know how to do that, and this gets the job done
+
+# compile regex
+pattern = re.compile(r'<span itemprop="name">(\w+)</span>')
+# find all matches
+five_letter_word_list = pattern.findall(meaningpedia_resp.text)
+
+computer_choice = random.choice(five_letter_word_list).upper()
+for x in computer_choice:
+    computer_choice_list.append(x)
+
+print(computer_choice)
+
+while ATTEMPTS > 0 and COMPLETE == False:
+    print(f'You have {ATTEMPTS} attempts remaining')
+    player_choice = input('CHOOSE WORD ').upper()
+    if player_choice.lower() not in five_letter_word_list:
+        print('\n Not a valid word! Try again')
+    else:
+        for y in player_choice:
+            player_choice_list.append(y)
+        
+        for x in player_choice_list:
+            box_check(x)
+            REF+=1
+        
+        ATTEMPTS -= 1
+
+        print(DISPLAY)
+        print(GAME_DISPLAY)
+        print(f'\nLetters not in word: {IRRELEVANT_LETTERS_LIST}')
+        
+        REF = 0
+        player_choice_list = []
+        DISPLAY =[]
+        if GAME_DISPLAY == ['🟩', '🟩', '🟩', '🟩', '🟩']:
+            print('Congratulations you win!')
+            COMPLETE = True
+
+        if ATTEMPTS == 0 and GAME_DISPLAY != ['🟩', '🟩', '🟩', '🟩', '🟩']:
+            print('YOU LOSE')
+            print(f'The word is: {computer_choice}')
+        GAME_DISPLAY=[]
+    
+
+IRRELEVANT_LETTERS_LIST = []
+
