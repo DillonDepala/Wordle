@@ -1,9 +1,8 @@
 import random
 import numpy as np
 from constants import WORD_LENGTH, ACCEPTABLE_WORDS_LIST
-import requests
 
-# BLANK_ARRAY = np.array()
+BLANK_ARRAY = np.array([])
 
 def user_input():
     user_choice = input(f'Choose a {WORD_LENGTH} letter word: ').lower()
@@ -12,10 +11,7 @@ def user_input():
     elif user_choice not in ACCEPTABLE_WORDS_LIST:
         raise Exception("Not a valid word\n please try again")
     else:
-        return user_choice
-
-
-user_input()
+        return np.array(list(user_choice))
 
 
 
