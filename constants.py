@@ -4,6 +4,7 @@ WORD_LENGTH = 5
 GAME_DISPLAY = []
 LIVES = 6
 RUNNING = True
+LETTERS_NOT_IN_WORD = []
 
 meaningpedia_resp = requests.get(
     "https://meaningpedia.com/5-letter-words?show=all")

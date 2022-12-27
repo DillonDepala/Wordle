@@ -1,6 +1,6 @@
 import random as rand
 import numpy as np
-from constants import WORD_LENGTH, ACCEPTABLE_WORDS_LIST, LIVES, GAME_DISPLAY, RUNNING
+from constants import * 
 
 def user_input():
     user_choice = input(f'Choose a {WORD_LENGTH} letter word: ').lower()
@@ -21,6 +21,14 @@ def yellow_box_check(user_choice, computer_choice, num):
         GAME_DISPLAY.append('🟨')
         return 'Yellow'
 
+def black_box_check(user_choice, computer_choice, num, letters_not_in_word):
+    if user_choice[num] not in computer_choice:
+        GAME_DISPLAY.append('⬛')
+        if user_choice[num] not in letters_not_in_word:
+            letters_not_in_word.append(user_choice[num])
+        return 'Black'
+
+
 def game_won_check(game_display):
     if game_display == ['🟩', '🟩', '🟩', '🟩', '🟩']:
         print('Congratulations you win!')
@@ -32,8 +40,7 @@ def game_lost_check(lives, game_display, comp_choice):
         print(f'The word is: {comp_choice}')
         return True
 
-
-
+#Game Start
 computer_choice = np.array(list(rand.choice(ACCEPTABLE_WORDS_LIST)))
 
 print(computer_choice)
@@ -51,10 +58,14 @@ while LIVES > 0 and RUNNING:
                 pass
             elif yellow_box_check(user_choice, computer_choice, num) == 'Yellow':
                 pass
-            else:
-                GAME_DISPLAY.append('⬛')
+            elif black_box_check(user_choice, computer_choice, num, LETTERS_NOT_IN_WORD) == 'Black':
+                pass
 
         print(GAME_DISPLAY)
+        print(user_choice)
+        print(f'\nLetters not in word: {LETTERS_NOT_IN_WORD}')
+        print(f'\nYou have {LIVES} lives remaining')
+
         if game_won_check(GAME_DISPLAY) == True:
             RUNNING = False
         
