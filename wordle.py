@@ -43,8 +43,6 @@ def game_lost_check(lives, game_display, comp_choice):
 #Game Start
 computer_choice = np.array(list(rand.choice(ACCEPTABLE_WORDS_LIST)))
 
-print(computer_choice)
-
 while LIVES > 0 and RUNNING:
 
     user_choice = user_input()
